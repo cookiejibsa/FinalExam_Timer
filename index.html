@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>기말고사 카운트다운</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Nanum Gothic", "맑은 고딕", sans-serif;
+      background: #1a1a2e;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.1em;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #aaa;
+      margin-bottom: 2.5rem;
+    }
+
+    .timer {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+
+    .unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .value {
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      width: 90px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    .label {
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    #message {
+      margin-top: 2rem;
+      font-size: 1rem;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>기말고사</h1>
+    <p class="subtitle">2026년 6월 29일 오전 9:00</p>
+    <div class="timer">
+      <div class="unit">
+        <div class="value" id="days">--</div>
+        <div class="label">일</div>
+      </div>
+      <div class="unit">
+        <div class="value" id="hours">--</div>
+        <div class="label">시간</div>
+      </div>
+      <div class="unit">
+        <div class="value" id="minutes">--</div>
+        <div class="label">분</div>
+      </div>
+      <div class="unit">
+        <div class="value" id="seconds">--</div>
+        <div class="label">초</div>
+      </div>
+    </div>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    const target = new Date('2026-06-29T09:00:00');
+
+    function pad(n) {
+      return String(n).padStart(2, '0');
+    }
+
+    function tick() {
+      const now = new Date();
+      const diff = target - now;
+
+      if (diff <= 0) {
+        ['days','hours','minutes','seconds'].forEach(id => document.getElementById(id).textContent = '00');
+        document.getElementById('message').textContent = '시험 시작! 화이팅! 🎯';
+        return;
+      }
+
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById('days').textContent = pad(d);
+      document.getElementById('hours').textContent = pad(h);
+      document.getElementById('minutes').textContent = pad(m);
+      document.getElementById('seconds').textContent = pad(s);
+
+      if (diff < 3600 * 1000) document.getElementById('message').textContent = '얼마 안 남았어요! 마지막 점검!';
+      else if (diff < 86400 * 1000) document.getElementById('message').textContent = '하루도 채 안 남았어요. 집중!';
+      else document.getElementById('message').textContent = `D-${d} 열심히 공부하세요!`;
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
